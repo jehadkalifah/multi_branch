@@ -4,7 +4,7 @@ pipeline {
         // Grant permission to downstream job(s) to copy artifacts in multi-branch pipeline
         // copyArtifactPermission('jobA', 'jobB', 'jobC')
         // copyArtifactPermission("/${env.JOB_NAME}")
-        copyArtifactPermission('123/main')
+        copyArtifactPermission("/${env.JOB_NAME}")
 
     }    
     stages {
