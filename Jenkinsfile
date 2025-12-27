@@ -9,6 +9,7 @@ pipeline {
         stage('BUILDING DOCKER IMAGE STAGE') {
             steps {
                 script {
+                    echo "env.JOB_NAME: ${env.JOB_NAME}"
                     env.DOCKER_IMAGE = "alpine:3.23.2_${BUILD_NUMBER}" 
                     writeFile file: "DOCKER_IMAGE_FILE.txt", text: env.DOCKER_IMAGE
                     archiveArtifacts artifacts: "DOCKER_IMAGE_FILE.txt", onlyIfSuccessful: true
