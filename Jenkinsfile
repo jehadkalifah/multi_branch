@@ -1,8 +1,10 @@
 pipeline {
     agent any
     options { 
-        // Grant permission to downstream job(s) to copy artifacts
-        copyArtifactPermission("/${env.JOB_NAME}")
+        // Grant permission to downstream job(s) to copy artifacts in multi-branch pipeline
+        // copyArtifactPermission('jobA', 'jobB', 'jobC')
+        // copyArtifactPermission("/${env.JOB_NAME}")
+        copyArtifactPermission("${env.JOB_NAME}")
 
     }    
     stages {
@@ -35,20 +37,21 @@ pipeline {
                 if (previousBuild != null) {
                     /*
                       copyArtifacts plugin should be installed
-                      Pipeline config --> Permission to Copy Artifact --> Projects to allow copy artifacts
+                      Single Pipeline --> View Configuration --> Permission to Copy Artifact --> Projects to allow copy artifacts
                       Example: If you have a job called sourceproject that archives files with archiveArtifacts, 
                       then another job can run copyArtifacts(projectName: 'sourceproject') 
                       to pull those files into its own workspace
 
                       If your jobs are organized inside folders, you must include the folder path. For example:
-                      projectName: 'MyFolder/sourceproject'
+                      projectName: '/MyFolder/sourceproject'
                     */
 
                     // Get the artifact from previous build 
                     def previousImageFile = copyArtifacts( projectName: "${env.JOB_NAME}",                                                        
                                                            // selector: [$class: 'SpecificBuildSelector', buildNumber: "${previousBuild.number}"],
                                                            // selector: lastSuccessful(),  
-                                                           selector: specific("${previousBuild.number}"),                                                                                                                                        
+                                                           selector: specific("${previousBuild.number}"),  
+                                                           // filter: "packages/infra*.zip",                                                                                                                                      
                                                            filter: 'DOCKER_IMAGE_FILE.txt', 
                                                            target: 'artifacts/' )
                                                                              
