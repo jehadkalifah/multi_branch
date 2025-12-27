@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    options { 
+        // Grant permission to downstream job(s) to copy artifacts
+        copyArtifactPermission("${env.JOB_NAME}")
+
+    }    
     stages {
         stage('BUILDING DOCKER IMAGE STAGE') {
             steps {
