@@ -3,6 +3,7 @@ pipeline {
     options { 
         // Grant permission to downstream job(s) to copy artifacts in multi-branch pipeline
         // copyArtifactPermission('jobA', 'jobB', 'jobC')
+        // Set / at beginning 
         copyArtifactPermission("/${env.JOB_NAME}")
 
     }    
